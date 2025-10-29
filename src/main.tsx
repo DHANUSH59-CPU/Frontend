@@ -5,12 +5,21 @@ import App from "./App.tsx";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router";
 import { appStore } from "./store/appStore.ts";
+import ClickSpark from "./components/ClickSpark.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Provider store={appStore}>
       <BrowserRouter>
-        <App />
+        <ClickSpark
+          sparkColor="#fff"
+          sparkSize={10}
+          sparkRadius={15}
+          sparkCount={8}
+          duration={400}
+        >
+          <App />
+        </ClickSpark>
       </BrowserRouter>
     </Provider>
   </StrictMode>

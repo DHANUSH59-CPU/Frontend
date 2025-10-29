@@ -102,7 +102,8 @@ export function SignupForm({
                 </div>
                 <span className="sr-only">Acme Inc.</span>
               </a>
-              <h1 className="text-xl font-bold">Welcome to Acme Inc.</h1>
+              <h1 className="text-xl font-bold">Welcome to Talent Frame</h1>
+              
               <FieldDescription>
                 Already have an account? <a href="/login">Sign in</a>
               </FieldDescription>

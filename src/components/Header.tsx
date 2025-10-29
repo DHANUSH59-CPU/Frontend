@@ -1,21 +1,41 @@
 "use client";
 
 import { Link, useNavigate } from "react-router";
-import { Button } from "@/components/ui/button";
 import { useAppDispatch, useAppSelector } from "@/store/appStore";
 import { logoutUser } from "@/store/authSlice";
+import { useState } from "react";
+import {
+  Navbar,
+  NavBody,
+  NavItems,
+  MobileNav,
+  NavbarLogo,
+  NavbarButton,
+  MobileNavHeader,
+  MobileNavToggle,
+  MobileNavMenu,
+} from "@/components/ui/resizable-navbar";
 
 export function Header() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { isAuthenticated, loading } = useAppSelector((s) => s.authSlice);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Debug: Log authentication state
+  console.log(
+    "Header - isAuthenticated:",
+    isAuthenticated,
+    "loading:",
+    loading
+  );
 
   const navItems = [
-    { label: "Home", to: "/" },
-    { label: "Character Builder", to: "/character-builder" },
-    { label: "Match", to: "/match" },
-    { label: "Connections", to: "/connections" },
-    { label: "Profile", to: "/profile" },
+    { name: "Home", link: "/" },
+    { name: "Character Builder", link: "/character-builder" },
+    { name: "Match", link: "/match" },
+    { name: "Connections", link: "/connections" },
+    { name: "Profile", link: "/profile" },
   ];
 
   const handleLogout = async () => {
@@ -24,30 +44,82 @@ export function Header() {
   };
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 bg-transparent">
-      <div className="container flex h-16 max-w-screen-2xl items-center justify-center px-6">
-        <nav className="flex items-center gap-1">
-          {navItems.map((item) => (
-            <Button key={item.to} asChild variant="ghost" className="px-3">
-              <Link to={item.to}>{item.label}</Link>
-            </Button>
-          ))}
-          {isAuthenticated ? (
-            <Button
-              variant="ghost"
-              className="px-3"
-              onClick={handleLogout}
-              disabled={loading}
-            >
-              Logout
-            </Button>
-          ) : (
-            <Button asChild variant="ghost" className="px-3">
-              <Link to="/login">Login</Link>
-            </Button>
-          )}
-        </nav>
-      </div>
-    </header>
+    <div className="relative w-full mt-5">
+      <Navbar>
+        {/* Desktop Navigation */}
+        <NavBody>
+          <NavbarLogo />
+          <NavItems items={navItems} />
+          <div className="flex items-center gap-4">
+            {isAuthenticated ? (
+              <NavbarButton
+                as="button"
+                variant="primary"
+                onClick={handleLogout}
+                disabled={loading}
+              >
+                Logout
+              </NavbarButton>
+            ) : (
+              <NavbarButton href="/login" variant="primary">
+                Login
+              </NavbarButton>
+            )}
+          </div>
+        </NavBody>
+
+        {/* Mobile Navigation */}
+        <MobileNav>
+          <MobileNavHeader>
+            <NavbarLogo />
+            <MobileNavToggle
+              isOpen={isMobileMenuOpen}
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            />
+          </MobileNavHeader>
+
+          <MobileNavMenu
+            isOpen={isMobileMenuOpen}
+            onClose={() => setIsMobileMenuOpen(false)}
+          >
+            {navItems.map((item, idx) => (
+              <Link
+                key={`mobile-link-${idx}`}
+                to={item.link}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="relative text-neutral-600 dark:text-neutral-300"
+              >
+                <span className="block">{item.name}</span>
+              </Link>
+            ))}
+            <div className="flex w-full flex-col gap-4">
+              {isAuthenticated ? (
+                <NavbarButton
+                  as="button"
+                  onClick={() => {
+                    handleLogout();
+                    setIsMobileMenuOpen(false);
+                  }}
+                  variant="primary"
+                  className="w-full"
+                  disabled={loading}
+                >
+                  Logout
+                </NavbarButton>
+              ) : (
+                <NavbarButton
+                  href="/login"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  variant="primary"
+                  className="w-full"
+                >
+                  Login
+                </NavbarButton>
+              )}
+            </div>
+          </MobileNavMenu>
+        </MobileNav>
+      </Navbar>
+    </div>
   );
 }

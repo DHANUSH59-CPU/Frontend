@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
+import { FireworksBackground } from "@/components/animate-ui/components/backgrounds/fireworks";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
