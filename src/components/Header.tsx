@@ -43,7 +43,6 @@ export function Header() {
     { name: "Character Builder", link: "/character-builder" },
     { name: "Match", link: "/match" },
     { name: "Connections", link: "/connections" },
-    { name: "Profile", link: "/profile" },
   ];
 
   const handleLogout = async () => {
