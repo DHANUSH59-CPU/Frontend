@@ -123,93 +123,105 @@ export default function Match() {
         </div>
       )}
 
-      {!loading && hasUploaded && matches.length > 0 && (
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-semibold">
-              Matches ({matches.length})
-            </h2>
-          </div>
+      {!loading &&
+        hasUploaded &&
+        matches.length > 0 &&
+        matches.some((m) => m.user != null) && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-semibold">
+                Matches ({matches.filter((m) => m.user).length})
+              </h2>
+            </div>
 
-          <div className="space-y-3">
-            {matches.map((match) => (
-              <Card
-                key={match.user._id}
-                className="p-4 hover:shadow-md transition-shadow"
-              >
-                <div className="flex items-center gap-4">
-                  {/* Avatar */}
-                  <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full border">
-                    {match.user.profileImage ? (
-                      <img
-                        src={match.user.profileImage}
-                        alt={match.user.userName}
-                        className="h-full w-full object-cover"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).style.display = "none";
-                        }}
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center bg-muted text-sm font-semibold">
-                        {match.user.userName.charAt(0).toUpperCase()}
+            <div className="space-y-3">
+              {matches
+                .filter((match) => match.user != null)
+                .map((match) => (
+                  <Card
+                    key={match.user!._id}
+                    className="p-4 hover:shadow-md transition-shadow"
+                  >
+                    <div className="flex items-center gap-4">
+                      {/* Avatar */}
+                      <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full border">
+                        {match.user!.profileImage ? (
+                          <img
+                            src={match.user!.profileImage}
+                            alt={match.user!.userName || "User"}
+                            className="h-full w-full object-cover"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).style.display =
+                                "none";
+                            }}
+                          />
+                        ) : (
+                          <div className="flex h-full w-full items-center justify-center bg-muted text-sm font-semibold">
+                            {(match.user!.userName || "U")
+                              .charAt(0)
+                              .toUpperCase()}
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
 
-                  {/* User Info */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-3 flex-wrap">
-                      <h3 className="font-semibold text-lg truncate">
-                        {match.user.userName}
-                      </h3>
-                      <span
-                        className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${getRoleBadgeColor(
-                          match.user.role
-                        )}`}
-                      >
-                        {match.user.role.charAt(0).toUpperCase() +
-                          match.user.role.slice(1)}
-                      </span>
+                      {/* User Info */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-3 flex-wrap">
+                          <h3 className="font-semibold text-lg truncate">
+                            {match.user!.userName || "Unknown User"}
+                          </h3>
+                          <span
+                            className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${getRoleBadgeColor(
+                              match.user!.role
+                            )}`}
+                          >
+                            {(match.user!.role || "unknown")
+                              .charAt(0)
+                              .toUpperCase() +
+                              (match.user!.role || "unknown").slice(1)}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Score */}
+                      <div className="flex flex-col items-end gap-1">
+                        <span className="text-xs text-muted-foreground">
+                          Compatibility
+                        </span>
+                        <span
+                          className={`text-2xl font-bold ${getScoreColor(
+                            match.score
+                          )}`}
+                        >
+                          {formatScore(match.score)}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-
-                  {/* Score */}
-                  <div className="flex flex-col items-end gap-1">
-                    <span className="text-xs text-muted-foreground">
-                      Compatibility
-                    </span>
-                    <span
-                      className={`text-2xl font-bold ${getScoreColor(
-                        match.score
-                      )}`}
-                    >
-                      {formatScore(match.score)}
-                    </span>
-                  </div>
-                </div>
-              </Card>
-            ))}
+                  </Card>
+                ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {!loading && hasUploaded && matches.length === 0 && (
-        <Card className="p-8 text-center">
-          <p className="text-muted-foreground">
-            No matches found. Try uploading a different image.
-          </p>
-          <Button
-            variant="outline"
-            className="mt-4"
-            onClick={() => {
-              setHasUploaded(false);
-              setMatches([]);
-            }}
-          >
-            Upload Another Image
-          </Button>
-        </Card>
-      )}
+      {!loading &&
+        hasUploaded &&
+        (matches.length === 0 || matches.every((m) => !m.user)) && (
+          <Card className="p-8 text-center">
+            <p className="text-muted-foreground">
+              No matches found. Try uploading a different image.
+            </p>
+            <Button
+              variant="outline"
+              className="mt-4"
+              onClick={() => {
+                setHasUploaded(false);
+                setMatches([]);
+              }}
+            >
+              Upload Another Image
+            </Button>
+          </Card>
+        )}
     </div>
   );
 }
