@@ -18,7 +18,7 @@ import {
     useEffect,
 } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { UploadCloud, File as FileIcon } from "lucide-react";
+import { UploadCloud } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type FileStatus = "idle" | "dragging" | "uploading" | "error";
@@ -337,7 +337,7 @@ export default function FileUpload({
     const [progress, setProgress] = useState(0);
     const [error, setError] = useState<FileError | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const uploadIntervalRef = useRef<NodeJS.Timeout | null>(null);
+    const uploadIntervalRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     useEffect(() => {
         return () => {
