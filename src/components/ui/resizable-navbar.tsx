@@ -8,6 +8,7 @@ import {
   useMotionValueEvent,
 } from "motion/react";
 import { Cover } from "@/components/ui/cover";
+import { Link } from "react-router";
 
 import React, { useRef, useState } from "react";
 
@@ -125,12 +126,12 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
       )}
     >
       {items.map((item, idx) => (
-        <a
+        <Link
+          to={item.link}
           onMouseEnter={() => setHovered(idx)}
           onClick={onItemClick}
           className="relative px-4 py-2 text-white pointer-events-auto"
           key={`link-${idx}`}
-          href={item.link}
         >
           {hovered === idx && (
             <motion.div
@@ -140,7 +141,7 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
             />
           )}
           <span className="relative z-20">{item.name}</span>
-        </a>
+        </Link>
       ))}
     </motion.div>
   );
@@ -233,14 +234,14 @@ export const MobileNavToggle = ({
 
 export const NavbarLogo = () => {
   return (
-    <a
-      href="/"
+    <Link
+      to="/"
       className="relative z-20 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-white"
     >
       <span className="font-bold text-lg text-white">
         <Cover>TalentFrame</Cover>
       </span>
-    </a>
+    </Link>
   );
 };
 

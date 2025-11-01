@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from "@/store/appStore";
 import { authenticateUser } from "@/store/authSlice";
 import Profile from "./Pages/Profile";
 import Loader from "@/components/kokonutui/loader";
+import Match from "./Pages/Match";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -39,6 +40,10 @@ function App() {
             <Route
               path="/profile"
               element={isAuthenticated ? <Profile /> : <Navigate to="/login" />}
+            />
+            <Route
+              path="/match"
+              element={isAuthenticated ? <Match /> : <Navigate to="/login" />}
             />
           </Route>
         </Routes>

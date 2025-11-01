@@ -245,7 +245,7 @@ export default function Profile() {
   return (
     <div className="mx-auto w-full max-w-4xl space-y-8 p-4 mt-24 mb-40 md:mt-32 md:mb-56">
       <div className="flex items-center gap-6">
-        <div className="relative h-40 w-40 shrink-0 overflow-hidden rounded-full border">
+        <div className="relative h-56 w-56 shrink-0 overflow-hidden rounded-full border">
           {avatarUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
