@@ -5,8 +5,6 @@ import {
   Shield,
   Target,
   Users,
-  Zap,
-  Building2,
 } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { AnimatedTestimonials } from "@/components/ui/animated-testimonials";
