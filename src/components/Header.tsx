@@ -121,7 +121,11 @@ export function Header() {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <NavbarButton href="/login" variant="primary">
+              <NavbarButton
+                as="button"
+                onClick={() => navigate("/login")}
+                variant="primary"
+              >
                 Login
               </NavbarButton>
             )}
@@ -168,8 +172,11 @@ export function Header() {
                 </NavbarButton>
               ) : (
                 <NavbarButton
-                  href="/login"
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  as="button"
+                  onClick={() => {
+                    navigate("/login");
+                    setIsMobileMenuOpen(false);
+                  }}
                   variant="primary"
                   className="w-full"
                 >
