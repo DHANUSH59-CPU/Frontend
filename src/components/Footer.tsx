@@ -100,12 +100,12 @@ export default function Footer() {
           <div>
             <h3 className="mb-4 text-lg font-semibold">Resources</h3>
             <nav className="space-y-2 text-sm">
-              <a
-                href="#"
+              <Link
+                to="/about"
                 className="block text-muted-foreground transition-colors hover:text-primary"
               >
                 About Us
-              </a>
+              </Link>
               <a
                 href="#"
                 className="block text-muted-foreground transition-colors hover:text-primary"
