@@ -42,7 +42,6 @@ export function Header() {
     { name: "Home", link: "/" },
     { name: "Character Builder", link: "/character-builder" },
     { name: "Match", link: "/match" },
-    { name: "Connections", link: "/connections" },
   ];
 
   const handleLogout = async () => {
@@ -52,9 +51,9 @@ export function Header() {
 
   return (
     <div className="relative w-full mt-5">
-      <Navbar>
+      <Navbar className="bg-transparent backdrop-blur-none">
         {/* Desktop Navigation */}
-        <NavBody>
+        <NavBody className="!bg-transparent dark:!bg-transparent">
           <NavbarLogo />
           <NavItems items={navItems} />
           <div className="flex items-center gap-4">
@@ -109,6 +108,9 @@ export function Header() {
                   <DropdownMenuItem asChild>
                     <Link to="/profile">Profile</Link>
                   </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/connections">Connections</Link>
+                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     onSelect={(e) => {
@@ -133,7 +135,7 @@ export function Header() {
         </NavBody>
 
         {/* Mobile Navigation */}
-        <MobileNav>
+        <MobileNav className="!bg-transparent dark:!bg-transparent">
           <MobileNavHeader>
             <NavbarLogo />
             <MobileNavToggle
@@ -145,6 +147,7 @@ export function Header() {
           <MobileNavMenu
             isOpen={isMobileMenuOpen}
             onClose={() => setIsMobileMenuOpen(false)}
+            className="!bg-transparent dark:!bg-transparent backdrop-blur-none shadow-none"
           >
             {navItems.map((item, idx) => (
               <Link

@@ -1,11 +1,9 @@
 "use client";
 
 import * as React from "react";
+import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Tooltip,
   TooltipContent,
@@ -16,40 +14,45 @@ import {
   Facebook,
   Instagram,
   Linkedin,
-  Moon,
-  Send,
-  Sun,
   Twitter,
+  Send,
 } from "lucide-react";
 
-export default function Footerdemo() {
-  const [isDarkMode, setIsDarkMode] = React.useState(true);
-  const [isChatOpen, setIsChatOpen] = React.useState(false);
+export default function Footer() {
+  const [email, setEmail] = React.useState("");
 
+  // Set dark mode as default theme
   React.useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [isDarkMode]);
+    document.documentElement.classList.add("dark");
+  }, []);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // TODO: Implement newsletter subscription
+    console.log("Newsletter subscription:", email);
+    setEmail("");
+  };
 
   return (
-    <footer className="relative border-t bg-background text-foreground transition-colors duration-300">
+    <footer className="relative border-t border-neutral-800/50 bg-background/50 backdrop-blur-sm text-foreground">
       <div className="container mx-auto px-4 py-12 md:px-6 lg:px-8">
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
+          {/* Brand & Newsletter */}
           <div className="relative">
-            <h2 className="mb-4 text-3xl font-bold tracking-tight">
-              Stay Connected
+            <h2 className="mb-2 text-2xl font-bold tracking-tight">
+              Talent Frame
             </h2>
-            <p className="mb-6 text-muted-foreground">
-              Join our newsletter for the latest updates and exclusive offers.
+            <p className="mb-6 text-sm text-muted-foreground">
+              AI-powered talent discovery for the film industry. Connect actors
+              and directors seamlessly.
             </p>
-            <form className="relative">
+            <form onSubmit={handleSubmit} className="relative">
               <Input
                 type="email"
                 placeholder="Enter your email"
-                className="pr-12 backdrop-blur-sm"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="pr-12 bg-background border-neutral-800/50"
               />
               <Button
                 type="submit"
@@ -60,52 +63,71 @@ export default function Footerdemo() {
                 <span className="sr-only">Subscribe</span>
               </Button>
             </form>
-            <div className="absolute -right-4 top-0 h-24 w-24 rounded-full bg-primary/10 blur-2xl" />
           </div>
+
+          {/* Quick Links */}
           <div>
             <h3 className="mb-4 text-lg font-semibold">Quick Links</h3>
             <nav className="space-y-2 text-sm">
-              <a
-                href="#"
-                className="block transition-colors hover:text-primary"
+              <Link
+                to="/"
+                className="block text-muted-foreground transition-colors hover:text-primary"
               >
                 Home
-              </a>
+              </Link>
+              <Link
+                to="/match"
+                className="block text-muted-foreground transition-colors hover:text-primary"
+              >
+                Match
+              </Link>
+              <Link
+                to="/character-builder"
+                className="block text-muted-foreground transition-colors hover:text-primary"
+              >
+                Character Builder
+              </Link>
+              <Link
+                to="/profile"
+                className="block text-muted-foreground transition-colors hover:text-primary"
+              >
+                Profile
+              </Link>
+            </nav>
+          </div>
+
+          {/* Resources */}
+          <div>
+            <h3 className="mb-4 text-lg font-semibold">Resources</h3>
+            <nav className="space-y-2 text-sm">
               <a
                 href="#"
-                className="block transition-colors hover:text-primary"
+                className="block text-muted-foreground transition-colors hover:text-primary"
               >
                 About Us
               </a>
               <a
                 href="#"
-                className="block transition-colors hover:text-primary"
+                className="block text-muted-foreground transition-colors hover:text-primary"
               >
-                Services
+                How It Works
               </a>
               <a
                 href="#"
-                className="block transition-colors hover:text-primary"
+                className="block text-muted-foreground transition-colors hover:text-primary"
               >
-                Products
+                Help Center
               </a>
               <a
                 href="#"
-                className="block transition-colors hover:text-primary"
+                className="block text-muted-foreground transition-colors hover:text-primary"
               >
                 Contact
               </a>
             </nav>
           </div>
-          <div>
-            <h3 className="mb-4 text-lg font-semibold">Contact Us</h3>
-            <address className="space-y-2 text-sm not-italic">
-              <p>123 Innovation Street</p>
-              <p>Tech City, TC 12345</p>
-              <p>Phone: (123) 456-7890</p>
-              <p>Email: hello@example.com</p>
-            </address>
-          </div>
+
+          {/* Social Media */}
           <div className="relative">
             <h3 className="mb-4 text-lg font-semibold">Follow Us</h3>
             <div className="mb-6 flex space-x-4">
@@ -115,10 +137,17 @@ export default function Footerdemo() {
                     <Button
                       variant="outline"
                       size="icon"
-                      className="rounded-full"
+                      className="rounded-full border-neutral-800/50 bg-background/50 hover:bg-background"
+                      asChild
                     >
-                      <Facebook className="h-4 w-4" />
-                      <span className="sr-only">Facebook</span>
+                      <a
+                        href="https://facebook.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Facebook"
+                      >
+                        <Facebook className="h-4 w-4" />
+                      </a>
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
@@ -132,10 +161,17 @@ export default function Footerdemo() {
                     <Button
                       variant="outline"
                       size="icon"
-                      className="rounded-full"
+                      className="rounded-full border-neutral-800/50 bg-background/50 hover:bg-background"
+                      asChild
                     >
-                      <Twitter className="h-4 w-4" />
-                      <span className="sr-only">Twitter</span>
+                      <a
+                        href="https://twitter.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Twitter"
+                      >
+                        <Twitter className="h-4 w-4" />
+                      </a>
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
@@ -149,10 +185,17 @@ export default function Footerdemo() {
                     <Button
                       variant="outline"
                       size="icon"
-                      className="rounded-full"
+                      className="rounded-full border-neutral-800/50 bg-background/50 hover:bg-background"
+                      asChild
                     >
-                      <Instagram className="h-4 w-4" />
-                      <span className="sr-only">Instagram</span>
+                      <a
+                        href="https://instagram.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Instagram"
+                      >
+                        <Instagram className="h-4 w-4" />
+                      </a>
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
@@ -166,10 +209,17 @@ export default function Footerdemo() {
                     <Button
                       variant="outline"
                       size="icon"
-                      className="rounded-full"
+                      className="rounded-full border-neutral-800/50 bg-background/50 hover:bg-background"
+                      asChild
                     >
-                      <Linkedin className="h-4 w-4" />
-                      <span className="sr-only">LinkedIn</span>
+                      <a
+                        href="https://linkedin.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="LinkedIn"
+                      >
+                        <Linkedin className="h-4 w-4" />
+                      </a>
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
@@ -178,63 +228,34 @@ export default function Footerdemo() {
                 </Tooltip>
               </TooltipProvider>
             </div>
-            <div className="flex items-center space-x-2">
-              <Sun className="h-4 w-4" />
-              <Switch
-                id="dark-mode"
-                checked={isDarkMode}
-                onCheckedChange={setIsDarkMode}
-              />
-              <Moon className="h-4 w-4" />
-              <Label htmlFor="dark-mode" className="sr-only">
-                Toggle dark mode
-              </Label>
-            </div>
           </div>
         </div>
-        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t pt-8 text-center md:flex-row">
+        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-neutral-800/50 pt-8 text-center md:flex-row">
           <p className="text-sm text-muted-foreground">
-            © 2024 Your Company. All rights reserved.
+            © 2024 Talent Frame. All rights reserved.
           </p>
           <nav className="flex gap-4 text-sm">
-            <a href="#" className="transition-colors hover:text-primary">
+            <a
+              href="#"
+              className="text-muted-foreground transition-colors hover:text-primary"
+            >
               Privacy Policy
             </a>
-            <a href="#" className="transition-colors hover:text-primary">
+            <a
+              href="#"
+              className="text-muted-foreground transition-colors hover:text-primary"
+            >
               Terms of Service
             </a>
-            <a href="#" className="transition-colors hover:text-primary">
+            <a
+              href="#"
+              className="text-muted-foreground transition-colors hover:text-primary"
+            >
               Cookie Settings
             </a>
           </nav>
         </div>
       </div>
-      <Button
-        onClick={() => setIsChatOpen(!isChatOpen)}
-        className="fixed bottom-4 right-4 z-50 rounded-full shadow-lg"
-      >
-        {isChatOpen ? "Close Chat" : "Open Chat"}
-      </Button>
-      {isChatOpen && (
-        <div className="fixed bottom-20 right-4 z-50 w-80 rounded-lg border bg-background p-4 shadow-lg">
-          <h4 className="mb-4 text-lg font-semibold">Live Chat</h4>
-          <div className="mb-4 h-40 overflow-y-auto rounded border p-2">
-            <p className="mb-2">
-              <strong>Support:</strong> Hello! How can I assist you today?
-            </p>
-          </div>
-          <form className="flex gap-2">
-            <Textarea
-              placeholder="Type your message..."
-              className="flex-grow"
-            />
-            <Button type="submit" size="icon">
-              <Send className="h-4 w-4" />
-              <span className="sr-only">Send message</span>
-            </Button>
-          </form>
-        </div>
-      )}
     </footer>
   );
 }
