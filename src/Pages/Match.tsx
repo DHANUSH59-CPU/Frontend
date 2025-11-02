@@ -5,6 +5,8 @@ import { Card } from "@/components/ui/card";
 import axiosClient from "@/utils/axios";
 import { useToast } from "@/components/ui/toast";
 import Loader from "@/components/kokonutui/loader";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import MatchDetailsModal from "@/components/MatchDetailsModal";
 
 interface MatchUser {
   _id: string;
@@ -23,10 +25,41 @@ interface MatchResponse {
   matches: Match[];
 }
 
+interface FullUserProfile {
+  _id: string;
+  userName: string;
+  emailId: string;
+  profileImage?: string;
+  phone?: string;
+  location?: string;
+  bio?: string;
+  role: "actor" | "director";
+  actorProfile?: {
+    age?: number;
+    gender?: "Male" | "Female" | "Other";
+    height?: number;
+    weight?: number;
+    skills?: string[];
+    languages?: string[];
+    portfolio?: string[];
+  };
+  directorProfile?: {
+    company?: string;
+    experienceYears?: number;
+    pastProjects?: string[];
+    castingPreferences?: string[];
+  };
+}
+
 export default function Match() {
   const [matches, setMatches] = useState<Match[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasUploaded, setHasUploaded] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  const [selectedMatchScore, setSelectedMatchScore] = useState<number | null>(
+    null
+  );
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { notify } = useToast();
 
   const handleImageUpload = async (file: File) => {
@@ -47,11 +80,15 @@ export default function Match() {
       );
 
       if (response.data.matches && response.data.matches.length > 0) {
-        setMatches(response.data.matches);
+        // Filter out directors - only show actors
+        const actorMatches = response.data.matches.filter(
+          (match) => match.user && match.user.role === "actor"
+        );
+        setMatches(actorMatches);
         notify({
           type: "success",
           title: "Matches found!",
-          description: `Found ${response.data.count} potential matches`,
+          description: `Found ${actorMatches.length} potential matches`,
         });
       } else {
         notify({
@@ -140,7 +177,12 @@ export default function Match() {
                 .map((match) => (
                   <Card
                     key={match.user!._id}
-                    className="p-4 hover:shadow-md transition-shadow"
+                    className="p-4 hover:shadow-md transition-shadow cursor-pointer"
+                    onClick={() => {
+                      setSelectedUserId(match.user!._id);
+                      setSelectedMatchScore(match.score);
+                      setIsModalOpen(true);
+                    }}
                   >
                     <div className="flex items-center gap-4">
                       {/* Avatar */}
@@ -222,6 +264,18 @@ export default function Match() {
             </Button>
           </Card>
         )}
+
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent onClose={() => setIsModalOpen(false)}>
+          {selectedUserId && selectedMatchScore !== null && (
+            <MatchDetailsModal
+              userId={selectedUserId}
+              compatibilityScore={selectedMatchScore}
+              onClose={() => setIsModalOpen(false)}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
