@@ -11,8 +11,9 @@ interface DialogProps {
   children: React.ReactNode;
 }
 
-interface DialogContentProps extends React.HTMLAttributes<HTMLDivElement> {
+interface DialogContentProps {
   children: React.ReactNode;
+  className?: string;
   onClose?: () => void;
 }
 
@@ -51,7 +52,6 @@ function DialogContent({
   children,
   className,
   onClose,
-  ...props
 }: DialogContentProps) {
   return (
     <motion.div
@@ -64,7 +64,6 @@ function DialogContent({
         className
       )}
       onClick={(e) => e.stopPropagation()}
-      {...props}
     >
       {onClose && (
         <button
@@ -81,4 +80,3 @@ function DialogContent({
 }
 
 export { Dialog, DialogContent };
-

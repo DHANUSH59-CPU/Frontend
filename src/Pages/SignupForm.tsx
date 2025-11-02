@@ -17,8 +17,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { useAppDispatch, useAppSelector } from "@/store/appStore";
 import type { RegisterData } from "@/store/authSlice";
-import { registerUser as registerUserAction } from "@/store/authSlice";
+import { registerUser as registerUserAction, loginUser } from "@/store/authSlice";
 import { useNavigate } from "react-router";
+import { useToast } from "@/components/ui/toast";
 
 // ✅ Zod validation schema
 const signupSchema = z.object({
@@ -41,9 +42,52 @@ export function SignupForm({
   const [role, setRole] = useState<"actor" | "director" | "">("");
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { notify } = useToast();
   const { isAuthenticated, loading, error } = useAppSelector(
     (s) => s.authSlice
   );
+
+  const handleGoogleResponse = async (response: any) => {
+    try {
+      const result = await dispatch(
+        loginUser({
+          emailId: "",
+          password: "",
+          isGoogleAuth: true,
+          googleToken: response.credential,
+        })
+      );
+      if (loginUser.fulfilled.match(result)) {
+        navigate("/");
+      }
+    } catch (error) {
+      console.error("Google login error:", error);
+      notify({
+        type: "error",
+        title: "Google signup failed",
+        description: "Unable to sign up with Google",
+      });
+    }
+  };
+
+  const handleGoogleLogin = () => {
+    if (window.google && window.google.accounts) {
+      window.google.accounts.id.initialize({
+        client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+        callback: handleGoogleResponse,
+      });
+      window.google.accounts.id.prompt();
+    } else {
+      // Fallback: wait for Google script to load
+      const checkGoogle = setInterval(() => {
+        if (window.google && window.google.accounts) {
+          clearInterval(checkGoogle);
+          handleGoogleLogin();
+        }
+      }, 100);
+      setTimeout(() => clearInterval(checkGoogle), 5000);
+    }
+  };
 
   // React Hook Form
   const {
@@ -236,12 +280,7 @@ export function SignupForm({
               <Button
                 variant="outline"
                 type="button"
-                onClick={() =>
-                  window.open(
-                    `${import.meta.env.VITE_API_URL || ""}/user/google-auth`,
-                    "_self"
-                  )
-                }
+                onClick={handleGoogleLogin}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                   <path

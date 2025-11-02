@@ -33,6 +33,7 @@ export interface LoginData {
   emailId: string;
   password: string;
   isGoogleAuth?: boolean;
+  googleToken?: string;
 }
 
 // 🧠 Initial state
@@ -66,12 +67,15 @@ export const loginUser = createAsyncThunk<
   { rejectValue: string }
 >("auth/login", async (credentials, { rejectWithValue }) => {
   try {
-    const endpoint = credentials.isGoogleAuth
-      ? "/user/google-auth"
-      : "/user/login";
-    const response = await axiosClient.post(endpoint, credentials);
-    // console.log("Login response:", response.data);
-    return response.data.user as User;
+    if (credentials.isGoogleAuth && credentials.googleToken) {
+      const response = await axiosClient.post("/user/google-auth", {
+        token: credentials.googleToken,
+      });
+      return response.data.user as User;
+    } else {
+      const response = await axiosClient.post("/user/login", credentials);
+      return response.data.user as User;
+    }
   } catch (error: any) {
     return rejectWithValue(
       error.response?.data?.message || "Something went wrong"

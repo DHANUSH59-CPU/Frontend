@@ -18,6 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useAppDispatch, useAppSelector } from "@/store/appStore";
 import { loginUser } from "@/store/authSlice";
+import { useToast } from "@/components/ui/toast";
 
 // ✅ Zod schema for login validation
 const loginSchema = z.object({
@@ -39,6 +40,7 @@ export function LoginForm({
 }: React.ComponentProps<"div">) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { notify } = useToast();
   const { isAuthenticated, loading, error } = useAppSelector(
     (s) => s.authSlice
   );
@@ -61,11 +63,46 @@ export function LoginForm({
     console.log("Login data submitted:", data);
   };
 
+  const handleGoogleResponse = async (response: any) => {
+    try {
+      const result = await dispatch(
+        loginUser({
+          emailId: "",
+          password: "",
+          isGoogleAuth: true,
+          googleToken: response.credential,
+        })
+      );
+      if (loginUser.fulfilled.match(result)) {
+        navigate("/");
+      }
+    } catch (error) {
+      console.error("Google login error:", error);
+      notify({
+        type: "error",
+        title: "Google login failed",
+        description: "Unable to sign in with Google",
+      });
+    }
+  };
+
   const handleGoogleLogin = () => {
-    window.open(
-      `${import.meta.env.VITE_API_URL || ""}/user/google-auth`,
-      "_self"
-    );
+    if (window.google && window.google.accounts) {
+      window.google.accounts.id.initialize({
+        client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+        callback: handleGoogleResponse,
+      });
+      window.google.accounts.id.prompt();
+    } else {
+      // Fallback: wait for Google script to load
+      const checkGoogle = setInterval(() => {
+        if (window.google && window.google.accounts) {
+          clearInterval(checkGoogle);
+          handleGoogleLogin();
+        }
+      }, 100);
+      setTimeout(() => clearInterval(checkGoogle), 5000);
+    }
   };
 
   return (

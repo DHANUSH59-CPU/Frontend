@@ -25,32 +25,6 @@ interface MatchResponse {
   matches: Match[];
 }
 
-interface FullUserProfile {
-  _id: string;
-  userName: string;
-  emailId: string;
-  profileImage?: string;
-  phone?: string;
-  location?: string;
-  bio?: string;
-  role: "actor" | "director";
-  actorProfile?: {
-    age?: number;
-    gender?: "Male" | "Female" | "Other";
-    height?: number;
-    weight?: number;
-    skills?: string[];
-    languages?: string[];
-    portfolio?: string[];
-  };
-  directorProfile?: {
-    company?: string;
-    experienceYears?: number;
-    pastProjects?: string[];
-    castingPreferences?: string[];
-  };
-}
-
 export default function Match() {
   const [matches, setMatches] = useState<Match[]>([]);
   const [loading, setLoading] = useState(false);
