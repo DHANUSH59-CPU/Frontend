@@ -72,19 +72,25 @@ export function Header() {
                   >
                     {(() => {
                       const avatarUrl =
-                        (user as any)?.profileImage || (user as any)?.profileImageUrl;
+                        (user as any)?.profileImage ||
+                        (user as any)?.profileImageUrl;
                       if (avatarUrl && !imgError) {
                         return (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img
                             src={avatarUrl}
-                            alt={`${(user as any)?.userName || user?.username || "User"} avatar`}
+                            alt={`${
+                              (user as any)?.userName ||
+                              user?.username ||
+                              "User"
+                            } avatar`}
                             className="h-full w-full object-cover"
                             onError={() => setImgError(true)}
                           />
                         );
                       }
-                      const name = (user as any)?.userName || user?.username || "U";
+                      const name =
+                        (user as any)?.userName || user?.username || "U";
                       const initials = name
                         .split(" ")
                         .filter(Boolean)
