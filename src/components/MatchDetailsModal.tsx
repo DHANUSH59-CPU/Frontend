@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import axiosClient from "@/utils/axios";
-import { useToast } from "@/components/ui/toast";
 import Loader from "@/components/kokonutui/loader";
 import { Button } from "@/components/ui/button";
 import { MessageCircle } from "lucide-react";
@@ -45,7 +45,7 @@ export default function MatchDetailsModal({
 }: MatchDetailsModalProps) {
   const [user, setUser] = useState<FullUserProfile | null>(null);
   const [loading, setLoading] = useState(true);
-  const { notify } = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -56,12 +56,6 @@ export default function MatchDetailsModal({
         setUser(response.data.user);
       } catch (error: any) {
         console.error("Error fetching user details:", error);
-        notify({
-          type: "error",
-          title: "Failed to load profile",
-          description:
-            error?.response?.data?.message || "Unable to fetch user details",
-        });
       } finally {
         setLoading(false);
       }
@@ -70,7 +64,7 @@ export default function MatchDetailsModal({
     if (userId) {
       fetchUserDetails();
     }
-  }, [userId, notify]);
+  }, [userId]);
 
   const formatScore = (score: number): string => {
     return `${(score * 100).toFixed(1)}%`;
@@ -148,11 +142,7 @@ export default function MatchDetailsModal({
       <div className="flex justify-end">
         <Button
           onClick={() => {
-            notify({
-              type: "info",
-              title: "Chat feature coming soon",
-              description: "This feature will be available soon",
-            });
+            navigate(`/chat/${userId}`);
           }}
           className="gap-2"
         >

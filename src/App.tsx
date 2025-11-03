@@ -11,6 +11,8 @@ import Profile from "./Pages/Profile";
 import Loader from "@/components/kokonutui/loader";
 import Match from "./Pages/Match";
 import About from "./Pages/About";
+import Chat from "./Pages/Chat";
+import Connections from "./Pages/Connections";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -45,6 +47,14 @@ function App() {
             <Route
               path="/match"
               element={isAuthenticated ? <Match /> : <Navigate to="/login" />}
+            />
+            <Route
+              path="/connections"
+              element={isAuthenticated ? <Connections /> : <Navigate to="/login" />}
+            />
+            <Route
+              path="/chat/:targetUserId"
+              element={isAuthenticated ? <Chat /> : <Navigate to="/login" />}
             />
             <Route path="/about" element={<About />} />
           </Route>
