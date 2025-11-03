@@ -13,6 +13,7 @@ import Match from "./Pages/Match";
 import About from "./Pages/About";
 import Chat from "./Pages/Chat";
 import Connections from "./Pages/Connections";
+import ViewProfile from "./Pages/ViewProfile";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -55,6 +56,10 @@ function App() {
             <Route
               path="/chat/:targetUserId"
               element={isAuthenticated ? <Chat /> : <Navigate to="/login" />}
+            />
+            <Route
+              path="/view-profile/:userId"
+              element={isAuthenticated ? <ViewProfile /> : <Navigate to="/login" />}
             />
             <Route path="/about" element={<About />} />
           </Route>

@@ -161,15 +161,17 @@ export default function Chat() {
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <div className="flex items-center gap-3 flex-1">
-            <Avatar className="h-10 w-10">
-              <AvatarImage
-                src={otherUser?.profileImage || ""}
-                alt={otherUser?.userName || "User"}
-              />
-              <AvatarFallback>
-                {(otherUser?.userName || "U").charAt(0).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
+            <button onClick={() => navigate(`/view-profile/${targetUserId}`)}>
+              <Avatar className="h-10 w-10 cursor-pointer hover:opacity-80 transition-opacity">
+                <AvatarImage
+                  src={otherUser?.profileImage || ""}
+                  alt={otherUser?.userName || "User"}
+                />
+                <AvatarFallback>
+                  {(otherUser?.userName || "U").charAt(0).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+            </button>
             <div>
               <h2 className="font-semibold text-lg">
                 {otherUser?.userName || "Chat"}

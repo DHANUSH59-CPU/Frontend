@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import { useParams, useNavigate } from "react-router";
 import axiosClient from "@/utils/axios";
 import Loader from "@/components/kokonutui/loader";
 import { Button } from "@/components/ui/button";
-import { MessageCircle } from "lucide-react";
+import { MessageCircle, ArrowLeft } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface FullUserProfile {
@@ -32,26 +32,18 @@ interface FullUserProfile {
   };
 }
 
-interface MatchDetailsModalProps {
-  userId: string;
-  compatibilityScore: number;
-  onClose: () => void;
-}
-
-export default function MatchDetailsModal({
-  userId,
-  compatibilityScore,
-  onClose,
-}: MatchDetailsModalProps) {
+export default function ViewProfile() {
+  const { userId } = useParams<{ userId: string }>();
+  const navigate = useNavigate();
   const [user, setUser] = useState<FullUserProfile | null>(null);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserDetails = async () => {
+      if (!userId) return;
+
       try {
         setLoading(true);
-        // Fetch user details
         const response = await axiosClient.get(`/api/user/${userId}`);
         setUser(response.data.user);
       } catch (error: any) {
@@ -61,66 +53,60 @@ export default function MatchDetailsModal({
       }
     };
 
-    if (userId) {
-      fetchUserDetails();
-    }
+    fetchUserDetails();
   }, [userId]);
-
-  const formatScore = (score: number): string => {
-    return `${(score * 100).toFixed(1)}%`;
-  };
-
-  const getScoreColor = (score: number): string => {
-    if (score >= 0.7) return "text-emerald-600 dark:text-emerald-400";
-    if (score >= 0.5) return "text-blue-600 dark:text-blue-400";
-    if (score >= 0.3) return "text-yellow-600 dark:text-yellow-400";
-    return "text-gray-600 dark:text-gray-400";
-  };
 
   if (loading) {
     return (
-      <div className="flex min-h-[400px] items-center justify-center">
-        <Loader title="Loading profile..." subtitle="Please wait" size="sm" />
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <Loader title="Loading profile..." subtitle="Please wait" />
       </div>
     );
   }
 
   if (!user) {
     return (
-      <div className="p-8 text-center">
-        <p className="text-muted-foreground">Unable to load user profile</p>
-        <Button variant="outline" className="mt-4" onClick={onClose}>
-          Close
-        </Button>
+      <div className="mx-auto w-full max-w-4xl space-y-6 p-4 mt-24 mb-40 md:mt-32 md:mb-56">
+        <Card className="p-8 text-center">
+          <p className="text-muted-foreground">Unable to load user profile</p>
+          <Button variant="outline" className="mt-4" onClick={() => navigate(-1)}>
+            Go Back
+          </Button>
+        </Card>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header with Avatar and Compatibility Score */}
+    <div className="mx-auto w-full max-w-4xl space-y-6 p-4 mt-24 mb-40 md:mt-32 md:mb-56">
+      {/* Back Button */}
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={() => navigate(-1)}
+        className="hover:bg-accent"
+      >
+        <ArrowLeft className="h-5 w-5" />
+      </Button>
+
+      {/* Header with Avatar */}
       <div className="flex items-start gap-6">
-        <button onClick={() => {
-          navigate(`/view-profile/${userId}`);
-          onClose();
-        }}>
-          <div className="relative h-32 w-32 shrink-0 overflow-hidden rounded-full border cursor-pointer hover:opacity-80 transition-opacity">
-            {user.profileImage ? (
-              <img
-                src={user.profileImage}
-                alt={user.userName}
-                className="h-full w-full object-cover"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).style.display = "none";
-                }}
-              />
-            ) : (
-              <div className="flex h-full w-full items-center justify-center bg-muted text-2xl font-semibold">
-                {(user.userName || "U").charAt(0).toUpperCase()}
-              </div>
-            )}
-          </div>
-        </button>
+        <div className="relative h-32 w-32 shrink-0 overflow-hidden rounded-full border">
+          {user.profileImage ? (
+            <img
+              src={user.profileImage}
+              alt={user.userName}
+              className="h-full w-full object-cover"
+              onError={(e) => {
+                (e.target as HTMLImageElement).style.display = "none";
+              }}
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center bg-muted text-2xl font-semibold">
+              {(user.userName || "U").charAt(0).toUpperCase()}
+            </div>
+          )}
+        </div>
         <div className="flex-1">
           <div className="flex items-start justify-between">
             <div>
@@ -129,31 +115,15 @@ export default function MatchDetailsModal({
                 {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
               </span>
             </div>
-            <div className="text-right mt-10">
-              <p className="text-sm text-muted-foreground">Compatibility</p>
-              <p
-                className={`text-3xl font-bold ${getScoreColor(
-                  compatibilityScore
-                )}`}
-              >
-                {formatScore(compatibilityScore)}
-              </p>
-            </div>
+            <Button
+              onClick={() => navigate(`/chat/${userId}`)}
+              className="gap-2"
+            >
+              <MessageCircle className="h-4 w-4" />
+              Chat
+            </Button>
           </div>
         </div>
-      </div>
-
-      {/* Chat Button */}
-      <div className="flex justify-end">
-        <Button
-          onClick={() => {
-            navigate(`/chat/${userId}`);
-          }}
-          className="gap-2"
-        >
-          <MessageCircle className="h-4 w-4" />
-          Chat
-        </Button>
       </div>
 
       {/* Basic Information */}
