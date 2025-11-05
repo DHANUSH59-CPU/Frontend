@@ -68,12 +68,12 @@ const Home = () => {
       title: "Character Builder",
       subtitle: "Define your vision",
       description:
-        "Build detailed character profiles with specific requirements for casting. Define the perfect character for your project. (Coming Soon)",
+        "Create a 3D avatar character for your movie project. Bring the character in your mind to life using our character builder tool.",
       features: [
-        "Character details",
-        "Casting requirements",
-        "Visual references",
-        "Coming Soon",
+        "3D Avatar Creation",
+        "Character Design",
+        "Download Avatar",
+        "Ready to Use",
       ],
       onClick: () => {
         if (isAuthenticated) {
@@ -82,7 +82,6 @@ const Home = () => {
           navigate("/login");
         }
       },
-      disabled: true,
     },
   ];
 
@@ -141,24 +140,24 @@ const Home = () => {
             {[
               {
                 step: "1",
-                title: "Sign up / Build Profile",
+                title: "Sign Up & Build Profile",
                 description:
-                  "Create your account and build a comprehensive profile showcasing your talent, skills, and experience.",
+                  "Create your account and build a comprehensive profile showcasing your talent, skills, and experience. Directors define their casting needs, actors showcase their abilities.",
                 icon: UserPlus,
               },
               {
                 step: "2",
-                title: "Upload Images / Get Matched",
+                title: "Create Your Character",
                 description:
-                  "Directors upload character images for AI matching. Actors get discovered through intelligent matching algorithms.",
-                icon: Upload,
+                  "Directors use the character builder to bring the character in their mind to life. Create a 3D avatar that represents your vision for the role.",
+                icon: Sparkles,
               },
               {
                 step: "3",
-                title: "Connect & Collaborate",
+                title: "Find Matching Actors",
                 description:
-                  "Review matches, check compatibility scores, and connect with perfect talent to bring your vision to life.",
-                icon: Users,
+                  "AI-powered matching finds real-world actors who match your character. Review compatibility scores and discover actors that are present and available.",
+                icon: Target,
               },
             ].map((step, index) => {
               const Icon = step.icon;
@@ -315,5 +314,4 @@ const Home = () => {
 
 export default Home;
 
-
-// 
+//
