@@ -14,6 +14,7 @@ import About from "./Pages/About";
 import Chat from "./Pages/Chat";
 import Connections from "./Pages/Connections";
 import ViewProfile from "./Pages/ViewProfile";
+import CharacterBuilder from "./Pages/CharacterBuilder";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -44,6 +45,10 @@ function App() {
             <Route
               path="/profile"
               element={isAuthenticated ? <Profile /> : <Navigate to="/login" />}
+            />
+            <Route
+              path="/character-builder"
+              element={isAuthenticated ? <CharacterBuilder /> : <Navigate to="/login" />}
             />
             <Route
               path="/match"

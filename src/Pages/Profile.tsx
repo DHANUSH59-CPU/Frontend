@@ -10,6 +10,9 @@ import { Button } from "@/components/ui/button";
 import FileUpload from "@/components/kokonutui/file-upload";
 import axiosClient from "@/utils/axios";
 import { useToast } from "@/components/ui/toast";
+import AvatarCreatorWrapper from "@/components/AvatarCreator";
+import SafeAvatar from "@/components/SafeAvatar";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 const genderEnum = z.enum(["Male", "Female", "Other"]);
 
@@ -65,6 +68,7 @@ export default function Profile() {
   const [avatarUrl, setAvatarUrl] = useState<string | undefined>(
     (user as any)?.profileImage || (user as any)?.profileImageUrl
   );
+  const [showAvatarCreator, setShowAvatarCreator] = useState(false);
   const { notify } = useToast();
 
   const defaultValues: FormValues = useMemo(() => {
@@ -172,6 +176,21 @@ export default function Profile() {
     }
   };
 
+  const handleAvatarCreated = async (url: string) => {
+    try {
+      setAvatarUrl(url);
+      setValue("profileImage", url);
+      setShowAvatarCreator(false);
+      notify({ type: "success", title: "Avatar created successfully" });
+    } catch (e: any) {
+      notify({
+        type: "error",
+        title: "Failed to save avatar",
+        description: e?.response?.data?.error || "Unable to save avatar",
+      });
+    }
+  };
+
   const ChipList = ({
     label,
     fieldPath,
@@ -247,19 +266,26 @@ export default function Profile() {
       <div className="flex items-center gap-6">
         <div className="relative h-56 w-56 shrink-0 overflow-hidden rounded-full border">
           {avatarUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={avatarUrl}
-              alt="Avatar"
-              className="h-full w-full object-cover"
-            />
+            avatarUrl.includes('readyplayer.me') ? (
+              <SafeAvatar 
+                modelSrc={avatarUrl} 
+                className="h-full w-full"
+              />
+            ) : (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={avatarUrl}
+                alt="Avatar"
+                className="h-full w-full object-cover"
+              />
+            )
           ) : (
             <div className="flex h-full w-full items-center justify-center text-sm text-muted-foreground">
               No Image
             </div>
           )}
         </div>
-        <div className="flex-1">
+        <div className="flex-1 space-y-3">
           <FileUpload
             acceptedFileTypes={[
               "image/png",
@@ -270,6 +296,15 @@ export default function Profile() {
             onUploadSuccess={handleAvatarUpload}
             className="max-w-xs"
           />
+          <div className="text-sm text-muted-foreground">or</div>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => setShowAvatarCreator(true)}
+            className="max-w-xs"
+          >
+            Create 3D Avatar
+          </Button>
         </div>
       </div>
 
@@ -427,6 +462,21 @@ export default function Profile() {
           </Button>
         </div>
       </form>
+
+      <Dialog open={showAvatarCreator} onOpenChange={setShowAvatarCreator}>
+        <DialogContent className="max-w-7xl h-[90vh] p-0" onClose={() => setShowAvatarCreator(false)}>
+          <div className="p-4 pb-0">
+            <h2 className="text-lg font-semibold">Create Your 3D Avatar</h2>
+          </div>
+          <div className="flex-1 overflow-hidden h-[calc(90vh-60px)]">
+            <AvatarCreatorWrapper
+              subdomain="demo"
+              onAvatarExported={handleAvatarCreated}
+              onClose={() => setShowAvatarCreator(false)}
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
