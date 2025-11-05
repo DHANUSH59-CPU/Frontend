@@ -10,15 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  UserPlus,
-  Upload,
-  Sparkles,
-  Users,
-  Shield,
-  Zap,
-  Target,
-} from "lucide-react";
+import { UserPlus, Sparkles, Shield, Zap, Target } from "lucide-react";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -301,7 +293,6 @@ const Home = () => {
                   description={action.description}
                   features={action.features}
                   onClick={action.onClick}
-                  disabled={action.disabled}
                 />
               </div>
             ))}

@@ -103,14 +103,16 @@ export default function Match() {
   return (
     <div className="mx-auto w-full max-w-4xl space-y-8 p-4 mt-24 mb-40 md:mt-32 md:mb-56">
       <div className="space-y-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Find Your Match</h1>
-          <p className="text-muted-foreground mt-2">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold tracking-tight mb-3">
+            Find Your Match
+          </h1>
+          <p className="text-muted-foreground">
             Upload an image to discover compatible actors or directors
           </p>
         </div>
 
-        <div className="flex justify-center">
+        <div className="flex justify-center mt-8">
           <FileUpload
             acceptedFileTypes={[
               "image/png",
