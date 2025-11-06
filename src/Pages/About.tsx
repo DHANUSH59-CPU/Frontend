@@ -6,7 +6,13 @@ import {
   Target,
   Users,
 } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { AnimatedTestimonials } from "@/components/ui/animated-testimonials";
 
 const FeatureCard = ({
@@ -105,10 +111,16 @@ const AboutUsPage = () => {
       { name: "FastAPI", href: "https://fastapi.tiangolo.com/" },
       { name: "Uvicorn", href: "https://www.uvicorn.org/" },
       { name: "PyTorch", href: "https://pytorch.org/" },
-      { name: "facenet-pytorch", href: "https://github.com/timesler/facenet-pytorch" },
+      {
+        name: "facenet-pytorch",
+        href: "https://github.com/timesler/facenet-pytorch",
+      },
       { name: "Pillow (PIL)", href: "https://pillow.readthedocs.io/" },
       { name: "NumPy", href: "https://numpy.org/" },
-      { name: "python-multipart", href: "https://github.com/andrew-d/python-multipart" },
+      {
+        name: "python-multipart",
+        href: "https://github.com/andrew-d/python-multipart",
+      },
     ],
     frontend: [
       { name: "React", href: "https://react.dev/" },
@@ -165,8 +177,8 @@ const AboutUsPage = () => {
                   portfolios and auditions, while actors struggle to be
                   discovered. Talent Frame was built to solve these challenges
                   by leveraging AI technology to match character requirements
-                  with the perfect actors, saving time and creating opportunities
-                  for both directors and actors in the industry.
+                  with the perfect actors, saving time and creating
+                  opportunities for both directors and actors in the industry.
                 </p>
               </CardContent>
             </Card>
@@ -175,7 +187,9 @@ const AboutUsPage = () => {
 
         {/* Features Section */}
         <section className="mb-20">
-          <h2 className="text-4xl font-bold text-center mb-10">What We Offer</h2>
+          <h2 className="text-4xl font-bold text-center mb-10">
+            What We Offer
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature) => (
               <FeatureCard
@@ -216,7 +230,9 @@ const AboutUsPage = () => {
 
         {/* Team Section */}
         <section className="mb-20">
-          <h2 className="text-4xl font-bold text-center mb-10">Meet the Team</h2>
+          <h2 className="text-4xl font-bold text-center mb-10">
+            Meet the Team
+          </h2>
           <AnimatedTestimonials
             testimonials={[
               {
@@ -231,7 +247,7 @@ const AboutUsPage = () => {
                   "Co-founder and AI/ML Engineer specializing in face recognition and embedding technologies. Developed the Python microservice that powers Talent Frame's AI matching engine, enabling intelligent actor-director connections.",
                 name: "G Harshavardhan",
                 designation: "Co-founder & AI/ML Engineer",
-                src: "https://res.cloudinary.com/dkjkyw4pc/image/upload/v1762092430/avatars/avatar_6906642a140cf4c2f7bacdd0.jpg",
+                src: "https://res.cloudinary.com/dkjkyw4pc/image/upload/v1762406630/avatars/avatar_6906642a140cf4c2f7bacdd0.jpg",
               },
             ]}
             autoplay={false}
@@ -243,4 +259,3 @@ const AboutUsPage = () => {
 };
 
 export default AboutUsPage;
-
